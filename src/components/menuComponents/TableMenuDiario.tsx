@@ -16,7 +16,7 @@ const initialRecipes: Recipe[] = [
   { id: 3, receta: 'Pasta con salsa de tomate', diaAServir: 'Miércoles', tiempoDeComida: 'Cena', porciones: 3 },
 ];
 
-const TableMenu = () => {
+const TableMenu = ({busqueda}) => {
   const [recipes, setRecipes] = useState(initialRecipes);
   const [editing, setEditing] = useState(false);
   const [currentRecipe, setCurrentRecipe] = useState<Recipe | null>(null);
@@ -33,6 +33,12 @@ const TableMenu = () => {
     setCurrentRecipe(null);
   };
 
+  const menuFiltrado = initialRecipes.filter((recipe)=>{
+    return(
+      (busqueda === '' || recipe.receta.includes(busqueda))
+    )
+  })
+
   return (
     <div className="container mx-auto p-4">
       <table className="w-full border-collapse border border-gray-400">
@@ -46,7 +52,7 @@ const TableMenu = () => {
           </tr>
         </thead>
         <tbody>
-          {recipes.map((recipe) => (
+          {menuFiltrado.map((recipe) => (
             <tr key={recipe.id}>
               <td className="border border-gray-400 p-2">{recipe.receta}</td>
               <td className="border border-gray-400 p-2">{recipe.diaAServir}</td>

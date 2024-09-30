@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-const SearchBar = () => {
+const SearchBar = ({setBusqueda}) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -11,11 +11,13 @@ const SearchBar = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center gap-2 p-4 bg-gray-100 rounded-md shadow-md">
+    <div className='buscarStyle'>
+      <div className='buscarSpace1'>
+      <form onSubmit={handleSubmit} className="flex items-center gap-2 p-4 bg-gray-100 rounded-md shadow-md">
       <input
         type="search"
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={(e) => {setSearchTerm(e.target.value); setBusqueda(e.target.value)}}
         placeholder="Buscar insumo"
         className="w-full p-2 pl-10 text-sm text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
@@ -26,6 +28,12 @@ const SearchBar = () => {
         Buscar
       </button>
     </form>
+      </div>
+
+      <div className='buscarSpace2'>
+
+      </div>
+    </div>
   );
 };
 

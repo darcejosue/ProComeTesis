@@ -17,7 +17,7 @@ const initialRecetas: Receta[] = [
   { id: 3, nombre: 'Receta 3', descripcion: 'Descripcion 3', ingredientes: 'Ingredientes 3', precio: 30, preparacion: 'Preparacion 3' },
 ];
 
-const TablaRecetas = () => {
+const TablaRecetas = ({busqueda}) => {
   const [recetas, setRecetas] = useState(initialRecetas);
   const [showIngredientes, setShowIngredientes] = useState(false);
   const [showPreparacion, setShowPreparacion] = useState(false);
@@ -30,6 +30,7 @@ const TablaRecetas = () => {
   const handleEditar = (receta: Receta) => {
     // Aqui puedes agregar la logica para editar la receta
     console.log(receta);
+    
   };
 
   const handleIngredientes = (receta: Receta) => {
@@ -41,6 +42,12 @@ const TablaRecetas = () => {
     setSelectedReceta(receta);
     setShowPreparacion(true);
   };
+
+  const recetaFiltrados = recetas.filter((receta)=>{
+    return(
+      (busqueda === '' || receta.nombre.includes(busqueda))
+    )
+  })
 
   return (
     <div className="container mx-auto p-4">
@@ -57,7 +64,7 @@ const TablaRecetas = () => {
           </tr>
         </thead>
         <tbody>
-          {recetas.map((receta) => (
+          {recetaFiltrados.map((receta) => (
             <tr key={receta.id}>
               <td className="border px-4 py-2">{receta.nombre}</td>
               <td className="border px-4 py-2">{receta.descripcion}</td>

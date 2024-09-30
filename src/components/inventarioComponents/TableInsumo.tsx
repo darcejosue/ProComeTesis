@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState } from 'react';
+import { getData } from '@/controllers/InventarioCRUD';
+import React, { useEffect, useState } from 'react';
 
 interface Insumo {
   nombre: string;
@@ -12,7 +13,7 @@ interface Insumo {
   proveedor: string;
 }
 
-const Table = () => {
+const Table = ({busqueda}) => {
   const [insumos, setInsumos] = useState<Insumo[]>([
     {
       nombre: 'Insumo 1',
@@ -34,14 +35,18 @@ const Table = () => {
     },
   ]);
 
+  const insumosFiltrados = insumos.filter((insumo)=>{
+    return(
+      (busqueda === '' || insumo.nombre.includes(busqueda))
+    )
+  })
 
 
   return (
     <div className="flex h-screen">
-     
-      <main className="flex-1 p-4">
+          <main className="flex-1 p-4">
           <table className="table-auto w-full">
-            <thead className='bg-slate-600 '>
+            <thead className=''>
               <tr >
                 <th className="px-4 py-2 text-black">Nombre Insumo</th>
                 <th className="px-4 py-2  text-black">Categoria</th>
@@ -55,7 +60,7 @@ const Table = () => {
               </tr>
             </thead>
             <tbody>
-              {insumos.map((insumo) => (
+              {insumosFiltrados.map((insumo) => (
                 <tr key={insumo.nombre}>
                   <td className="border px-4 py-2">{insumo.nombre}</td>
                   <td className="border px-4 py-2">{insumo.categoria}</td>

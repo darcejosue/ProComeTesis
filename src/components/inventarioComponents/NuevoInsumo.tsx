@@ -26,6 +26,7 @@ const FormularioInsumo = () => {
       precio,
       proveedor,
     });
+
   };
 
   return (

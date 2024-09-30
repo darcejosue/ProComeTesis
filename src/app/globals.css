@@ -25,3 +25,26 @@ body {
     text-wrap: balance;
   }
 }
+
+.parent {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 1px;
+  grid-row-gap: 0px;
+  }
+  
+  .div1 { grid-area: 1 / 1 / 2 / 5; }
+  .div2 { grid-area: 1 / 5 / 2 / 6; } 
+
+  .buscarStyle {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 1px;
+    grid-row-gap: 0px;
+    }
+    
+    .buscarSpace1 { grid-area: 1 / 1 / 2 / 5; }
+    .buscarSpace2 { grid-area: 1 / 1 / 1 / 1; } 
+  
