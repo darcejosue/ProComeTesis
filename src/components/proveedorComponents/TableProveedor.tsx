@@ -6,10 +6,10 @@ interface Proveedor {
   telefono: string;
 }
 
-const ProveedoresTable = ({busqueda}) => {
+const ProveedoresTable = ({busqueda, visibleList, setVisibleList}) => {
   const [proveedores, setProveedores] = useState<Proveedor[]>([
-    { id: 1, nombre: 'Proveedor 1', telefono: '123456789' },
-    { id: 2, nombre: 'Proveedor 2', telefono: '987654321' },
+    { id: 1, nombre: 'Verduras Ordoñes', telefono: '123456789' },
+    { id: 2, nombre: 'Carniceria Morales', telefono: '987654321' },
   ]);
 
   const handleEliminar = (id: number) => {
@@ -18,7 +18,7 @@ const ProveedoresTable = ({busqueda}) => {
 
   const proveedoresFiltrados = proveedores.filter((proveedor)=>{
     return(
-      (busqueda === '' || proveedor.nombre.includes(busqueda))
+      (busqueda === '' || proveedor.nombre.toLowerCase().includes( busqueda.toString().toLowerCase()))
     )
   })
 
@@ -40,7 +40,9 @@ const ProveedoresTable = ({busqueda}) => {
               <td className="border px-4 py-2">{proveedor.nombre}</td>
               <td className="border px-4 py-2">{proveedor.telefono}</td>
               <td className="border px-4 py-2">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <button 
+                onClick={()=>setVisibleList(!visibleList)}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                   Lista de compra
                 </button>
               </td>

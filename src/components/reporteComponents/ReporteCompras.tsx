@@ -11,9 +11,9 @@ interface Compra {
 
 const ReporteDeCompras = () => {
   const [compras, setCompras] = useState<Compra[]>([
-    { fecha: '2022-01-01', producto: 'Producto 1', precio: 100, proveedor: 'Proveedor 1' },
-    { fecha: '2022-01-02', producto: 'Producto 2', precio: 200, proveedor: 'Proveedor 2' },
-    { fecha: '2022-01-03', producto: 'Producto 3', precio: 300, proveedor: 'Proveedor 1' },
+    { fecha: '2024-08-01', producto: 'Cebolla', precio: 25, proveedor: 'Verduras Ordoñes' },
+    { fecha: '2024-08-01', producto: 'Chiltomas', precio: 15, proveedor: 'Verduras Ordoñes' },
+    { fecha: '2024-08-02', producto: 'Carne de res', precio: 145, proveedor: 'Carniceria Morales' },
   ]);
 
   const [filtroFecha, setFiltroFecha] = useState('');
@@ -22,7 +22,7 @@ const ReporteDeCompras = () => {
   const comprasFiltradas = compras.filter((compra) => {
     return (
       (filtroFecha === '' || compra.fecha.includes(filtroFecha)) &&
-      (filtroProveedor === '' || compra.proveedor.includes(filtroProveedor))
+      (filtroProveedor === '' || compra.proveedor.toLowerCase().includes( filtroProveedor.toString().toLowerCase()))
     );
   });
 

@@ -16,28 +16,28 @@ interface Insumo {
 const Table = ({busqueda}) => {
   const [insumos, setInsumos] = useState<Insumo[]>([
     {
-      nombre: 'Insumo 1',
-      categoria: 'Categoria 1',
-      unidadDeMedida: 'Unidad 1',
-      descripcion: 'Descripcion 1',
+      nombre: 'Cebollas',
+      categoria: 'Verdura',
+      unidadDeMedida: 'Libra',
+      descripcion: 'Cebolla blanca',
       cantidad: 10,
-      precio: 100,
-      proveedor: 'Proveedor 1',
+      precio: 25,
+      proveedor: 'Verduras Ordoñes',
     },
     {
-      nombre: 'Insumo 2',
-      categoria: 'Categoria 2',
-      unidadDeMedida: 'Unidad 2',
-      descripcion: 'Descripcion 2',
-      cantidad: 20,
-      precio: 200,
-      proveedor: 'Proveedor 2',
+      nombre: 'Carne de res',
+      categoria: 'Carnes',
+      unidadDeMedida: 'Libra',
+      descripcion: 'Carne de res',
+      cantidad: 40,
+      precio: 145,
+      proveedor: 'Carniceria Morales',
     },
   ]);
 
   const insumosFiltrados = insumos.filter((insumo)=>{
     return(
-      (busqueda === '' || insumo.nombre.includes(busqueda))
+      (busqueda === '' || insumo.nombre.toLowerCase().includes( busqueda.toString().toLowerCase()))
     )
   })
 

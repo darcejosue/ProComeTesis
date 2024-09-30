@@ -11,9 +11,9 @@ interface Recipe {
 }
 
 const initialRecipes: Recipe[] = [
-  { id: 1, receta: 'Tacos al pastor', diaAServir: 'Lunes', tiempoDeComida: 'Comida', porciones: 4 },
-  { id: 2, receta: 'Ensalada de frutas', diaAServir: 'Martes', tiempoDeComida: 'Desayuno', porciones: 2 },
-  { id: 3, receta: 'Pasta con salsa de tomate', diaAServir: 'Miércoles', tiempoDeComida: 'Cena', porciones: 3 },
+  { id: 1, receta: 'Ensalada de frutas', diaAServir: 'Lun Sep 30 2024', tiempoDeComida: 'Desayuno', porciones: 35 },
+  { id: 2, receta: 'Tacos al pastor', diaAServir: 'Lun Sep 30 2024', tiempoDeComida: 'Comida', porciones: 32 },
+  { id: 3, receta: 'Pasta con salsa de tomate', diaAServir: 'Lun Sep 30 2024', tiempoDeComida: 'Cena', porciones: 35 },
 ];
 
 const TableMenu = ({busqueda}) => {
@@ -35,7 +35,7 @@ const TableMenu = ({busqueda}) => {
 
   const menuFiltrado = initialRecipes.filter((recipe)=>{
     return(
-      (busqueda === '' || recipe.receta.includes(busqueda))
+      (busqueda === '' || recipe.receta.toLowerCase().includes( busqueda.toString().toLowerCase()))
     )
   })
 
@@ -45,10 +45,10 @@ const TableMenu = ({busqueda}) => {
         <thead>
           <tr>
             <th className="border border-gray-400 p-2">Receta</th>
-            <th className="border border-gray-400 p-2">Día a servir</th>
+            <th className="border border-gray-400 p-2 px-2">Día a servir</th>
             <th className="border border-gray-400 p-2">Tiempo de comida</th>
             <th className="border border-gray-400 p-2">Porciones</th>
-            <th className="border border-gray-400 p-2">Editar</th>
+            {(<th className="border border-gray-400 p-2">Ver Receta</th>)}
           </tr>
         </thead>
         <tbody>
@@ -58,7 +58,7 @@ const TableMenu = ({busqueda}) => {
               <td className="border border-gray-400 p-2">{recipe.diaAServir}</td>
               <td className="border border-gray-400 p-2">{recipe.tiempoDeComida}</td>
               <td className="border border-gray-400 p-2">{recipe.porciones}</td>
-              <td className="border border-gray-400 p-2">
+              {(<td className="border border-gray-400 p-2">
                 {editing && currentRecipe?.id === recipe.id ? (
                   <button
                     className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
@@ -71,10 +71,10 @@ const TableMenu = ({busqueda}) => {
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     onClick={() => handleEdit(recipe)}
                   >
-                    Editar
+                    Ver Receta
                   </button>
                 )}
-              </td>
+              </td>)}
             </tr>
           ))}
         </tbody>

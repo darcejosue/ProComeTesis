@@ -13,16 +13,19 @@ const Comedor = () => {
 
   const tabs = [
     { name: 'Menu Diario', page: <MenuDiario /> },
-    { name: 'Inventario', page: <Inventario /> },
+    /*{ name: 'Inventario', page: <Inventario /> },
     { name: 'Recetas', page: <Recetas /> },
     { name: 'Proveedores', page: <Proveedores /> },
-    { name: 'Reportes', page: <Reportes /> },
+    { name: 'Reportes', page: <Reportes /> },*/
   ];
 
   return (
     <div className="flex h-screen ">
       <aside className="bg-gray-200 w-64 p-4 ">
         <ul>
+          <li>
+            <img src={"https://media.istockphoto.com/id/1153582583/es/vector/la-abuela-est%C3%A1-cocinando-lindo-estilo-conjunto-de-dise%C3%B1o-vectorial-vector.jpg?s=612x612&w=0&k=20&c=gZ1MIbyVQs9iV6CcvzyAygcTocR4cCFWaDyA0q4MIWU="}/>
+          </li>
           {tabs.map((tab) => (
             <li key={tab.name}>
               <button

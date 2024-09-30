@@ -15,6 +15,12 @@ const tiempoComidaOptions = [
   { value: 'cena', label: 'Cena' },
 ];
 
+const recetaOptions = [
+  { value: 'receta 1', label: 'Tacos al pastor' },
+  { value: 'receta 2', label: 'Ensalada de frutas' },
+  { value: 'receta 3', label: 'Indio Viejo' },
+];
+
 const FormularioMenuDiario = () => {
   const [formValues, setFormValues] = useState<FormValues>({
     nombreReceta: '',
@@ -45,18 +51,25 @@ const FormularioMenuDiario = () => {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 bg-white rounded-md shadow-md">
+      
       <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nombreReceta">
           Nombre Receta
         </label>
-        <input
-          type="text"
+        <select
           id="nombreReceta"
           name="nombreReceta"
           value={formValues.nombreReceta}
-          onChange={handleInputChange}
+          onChange={handleSelectChange}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
+        >
+          <option value="">Seleccione una opción</option>
+          {recetaOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="diaServicio">

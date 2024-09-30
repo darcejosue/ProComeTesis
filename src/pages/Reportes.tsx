@@ -1,6 +1,6 @@
 'use client'
 
-import ReporteDeCompras from '@/components/reporteComponents/ReporteCompras'
+import Navbar from '@/components/reporteComponents/NavbarReporte'
 import React from 'react'
 
 export const Reportes = () => {
@@ -8,7 +8,7 @@ export const Reportes = () => {
     <div>
       <h1 className='text-center text-3xl text-black font-bold py-2'
             >Reportes</h1>
-      <ReporteDeCompras/>
+      <Navbar/>
     </div>
   )
 }
