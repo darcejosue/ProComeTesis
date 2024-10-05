@@ -7,16 +7,18 @@ import { Recetas } from "@/pages/Recetas";
 import { Reportes } from "@/pages/Reportes";
 import { useState } from "react";
 import LogoutButton from "./CerrarSesion";
+import { Personal } from "@/pages/Personal";
 
 const Comedor = () => {
   const [activeTab, setActiveTab] = useState(<Inventario />);
 
   const tabs = [
     { name: 'Menu Diario', page: <MenuDiario /> },
-    /*{ name: 'Inventario', page: <Inventario /> },
+    { name: 'Inventario', page: <Inventario /> },
     { name: 'Recetas', page: <Recetas /> },
     { name: 'Proveedores', page: <Proveedores /> },
-    { name: 'Reportes', page: <Reportes /> },*/
+    { name: 'Reportes', page: <Reportes /> },
+    { name: 'Personal', page: <Personal /> },
   ];
 
   return (
