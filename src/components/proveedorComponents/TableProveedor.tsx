@@ -1,24 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface Proveedor {
-  id: number;
-  nombre: string;
-  telefono: string;
+  _id: number;
+  supplierName: string;
+  supplierTel: string;
 }
 
 const ProveedoresTable = ({busqueda, visibleList, setVisibleList}) => {
-  const [proveedores, setProveedores] = useState<Proveedor[]>([
-    { id: 1, nombre: 'Verduras Ordoñes', telefono: '123456789' },
-    { id: 2, nombre: 'Carniceria Morales', telefono: '987654321' },
-  ]);
+  const [proveedores, setProveedores] = useState<Proveedor[]>([]);
+
+  useEffect(()=>{
+    async function getInsumos(){
+      const data = await fetch('http://localhost:4000/api/supplier')
+      const proveedor = await data.json();
+      setProveedores(proveedor)
+    }
+    getInsumos()
+  },[])
 
   const handleEliminar = (id: number) => {
-    setProveedores(proveedores.filter((proveedor) => proveedor.id !== id));
+    setProveedores(proveedores.filter((proveedor) => proveedor._id !== id));
   };
 
   const proveedoresFiltrados = proveedores.filter((proveedor)=>{
     return(
-      (busqueda === '' || proveedor.nombre.toLowerCase().includes( busqueda.toString().toLowerCase()))
+      (busqueda === '' || proveedor.supplierName.toLowerCase().includes( busqueda.toString().toLowerCase()))
     )
   })
 
@@ -36,9 +42,9 @@ const ProveedoresTable = ({busqueda, visibleList, setVisibleList}) => {
         </thead>
         <tbody>
           {proveedoresFiltrados.map((proveedor) => (
-            <tr key={proveedor.id}>
-              <td className="border px-4 py-2">{proveedor.nombre}</td>
-              <td className="border px-4 py-2">{proveedor.telefono}</td>
+            <tr key={proveedor._id}>
+              <td className="border px-4 py-2">{proveedor.supplierName}</td>
+              <td className="border px-4 py-2">{proveedor.supplierTel}</td>
               <td className="border px-4 py-2">
                 <button 
                 onClick={()=>setVisibleList(!visibleList)}
@@ -54,7 +60,7 @@ const ProveedoresTable = ({busqueda, visibleList, setVisibleList}) => {
               <td className="border px-4 py-2">
                 <button
                   className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={() => handleEliminar(proveedor.id)}
+                  onClick={() => handleEliminar(proveedor._id)}
                 >
                   Eliminar
                 </button>

@@ -1,6 +1,7 @@
-'use client'
+
 
 import Comedor from "../components/ComedorMain";
+
 
 export default function Home() {
   return (

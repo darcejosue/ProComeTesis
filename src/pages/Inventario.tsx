@@ -32,6 +32,7 @@ export const Inventario = () => {
             }
 
             <Table busqueda={busqueda}/>
+            
 
 
         </div>

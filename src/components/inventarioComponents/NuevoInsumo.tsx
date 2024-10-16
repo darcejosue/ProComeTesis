@@ -1,32 +1,72 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const categorias = ['Categoria 1', 'Categoria 2', 'Categoria 3'];
-const unidadesDeMedida = ['Unidad 1', 'Unidad 2', 'Unidad 3'];
-const proveedores = ['Proveedor 1', 'Proveedor 2', 'Proveedor 3'];
+const categorias = [1,2,3];
+const unidadesDeMedida = [1,2,3];
+
+interface Proveedor{
+  _id: string;
+  supplierName: string;
+}
+
+interface Insumos {
+  _id: string;
+  stockName: string;
+  stockDescription: string;
+  stockCategory: number;
+  stockUnitMesure: number;
+  stockQuantity: number;
+  stockPrice: number;
+  stockSupplier: object;
+}
 
 const FormularioInsumo = () => {
-  const [nombreInsumo, setNombreInsumo] = useState('');
+  /*const [nombreInsumo, setNombreInsumo] = useState('');
   const [categoria, setCategoria] = useState('');
   const [cantidad, setCantidad] = useState(0);
   const [descripcion, setDescripcion] = useState('');
   const [unidadDeMedida, setUnidadDeMedida] = useState('');
   const [precio, setPrecio] = useState(0);
-  const [proveedor, setProveedor] = useState('');
+  const [proveedor, setProveedor] = useState('');*/
+  const [proveedorLista, setProveedorLista] = useState<Proveedor[]>([]);
+  const [insumoSave, setInumoSave] = useState<Insumos[]>([])
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  useEffect(()=>{
+    async function getProveedorName(){
+      const data = await fetch('http://localhost:4000/api/supplier')
+      const proveedorData = await data.json();
+      setProveedorLista(proveedorData);
+    }
+    getProveedorName()
+  },[])
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInumoSave({ ...insumoSave, [e.target.name]: e.target.value });
+  };
+
+  const handleChangeSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setInumoSave({ ...insumoSave, [e.target.name]: e.target.value });
+  };
+
+ 
+
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log({
-      nombreInsumo,
-      categoria,
-      cantidad,
-      descripcion,
-      unidadDeMedida,
-      precio,
-      proveedor,
-    });
 
+    try {
+      await fetch('http://localhost:4000/api/stock', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(insumoSave)
+      })
+
+  } catch (error) {
+    console.error(error)
+  }
+    console.log(insumoSave)
   };
 
   return (
@@ -34,26 +74,26 @@ const FormularioInsumo = () => {
       <h2 className="text-lg font-bold mb-4">Formulario de Insumo</h2>
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col mb-4">
-          <label className="text-sm font-bold mb-2" htmlFor="nombreInsumo">
+          <label className="text-sm font-bold mb-2" htmlFor="stockName">
             Nombre de Insumo
           </label>
           <input
             className="p-2 rounded-lg border border-gray-300"
             type="text"
-            id="nombreInsumo"
-            value={nombreInsumo}
-            onChange={(e) => setNombreInsumo(e.target.value)}
+            name="stockName"
+            value={insumoSave.stockName}
+            onChange={handleChange}
           />
         </div>
         <div className="flex flex-col mb-4">
-          <label className="text-sm font-bold mb-2" htmlFor="categoria">
+          <label className="text-sm font-bold mb-2" htmlFor="stockCategory">
             Categoria
           </label>
           <select
             className="p-2 rounded-lg border border-gray-300"
-            id="categoria"
-            value={categoria}
-            onChange={(e) => setCategoria(e.target.value)}
+            name="stockCategory"
+            value={insumoSave.stockCategory}
+            onChange={handleChangeSelect}
           >
             <option value="">Seleccione una categoria</option>
             {categorias.map((categoria) => (
@@ -64,37 +104,37 @@ const FormularioInsumo = () => {
           </select>
         </div>
         <div className="flex flex-col mb-4">
-          <label className="text-sm font-bold mb-2" htmlFor="cantidad">
+          <label className="text-sm font-bold mb-2" htmlFor="stockQuantity">
             Cantidad
           </label>
           <input
             className="p-2 rounded-lg border border-gray-300"
             type="number"
-            id="cantidad"
-            value={cantidad}
-            onChange={(e) => setCantidad(parseInt(e.target.value, 10))}
+            name="stockQuantity"
+            value={insumoSave.stockQuantity}
+            onChange={handleChange}
           />
         </div>
         <div className="flex flex-col mb-4">
-          <label className="text-sm font-bold mb-2" htmlFor="descripcion">
+          <label className="text-sm font-bold mb-2" htmlFor="stockDescription">
             Descripcion
           </label>
-          <textarea
+          <input
             className="p-2 rounded-lg border border-gray-300"
-            id="descripcion"
-            value={descripcion}
-            onChange={(e) => setDescripcion(e.target.value)}
+            name="stockDescription"
+            value={insumoSave.stockDescription}
+            onChange={handleChange}
           />
         </div>
         <div className="flex flex-col mb-4">
-          <label className="text-sm font-bold mb-2" htmlFor="unidadDeMedida">
+          <label className="text-sm font-bold mb-2" htmlFor="stockUnitMesure">
             Unidad de Medida
           </label>
           <select
             className="p-2 rounded-lg border border-gray-300"
-            id="unidadDeMedida"
-            value={unidadDeMedida}
-            onChange={(e) => setUnidadDeMedida(e.target.value)}
+            name="stockUnitMesure"
+            value={insumoSave.stockUnitMesure}
+            onChange={handleChangeSelect}
           >
             <option value="">Seleccione una unidad de medida</option>
             {unidadesDeMedida.map((unidad) => (
@@ -105,31 +145,31 @@ const FormularioInsumo = () => {
           </select>
         </div>
         <div className="flex flex-col mb-4">
-          <label className="text-sm font-bold mb-2" htmlFor="precio">
+          <label className="text-sm font-bold mb-2" htmlFor="stockPrice">
             Precio
           </label>
           <input
             className="p-2 rounded-lg border border-gray-300"
             type="number"
-            id="precio"
-            value={precio}
-            onChange={(e) => setPrecio(parseInt(e.target.value, 10))}
+            name="stockPrice"
+            value={insumoSave.stockPrice}
+            onChange={handleChange}
           />
         </div>
         <div className="flex flex-col mb-4">
-          <label className="text-sm font-bold mb-2" htmlFor="proveedor">
+          <label className="text-sm font-bold mb-2" htmlFor="supplierName">
             Proveedor
           </label>
           <select
             className="p-2 rounded-lg border border-gray-300"
-            id="proveedor"
-            value={proveedor}
-            onChange={(e) => setProveedor(e.target.value)}
+            name="stockSupplier"
+            value={setInumoSave.stockSupplier}
+            onChange={handleChangeSelect}
           >
             <option value="">Seleccione un proveedor</option>
-            {proveedores.map((proveedor) => (
-              <option key={proveedor} value={proveedor}>
-                {proveedor}
+            {proveedorLista.map((proveedor) => (
+              <option key={proveedor._id} value={proveedor._id}>
+                {proveedor.supplierName}
               </option>
             ))}
           </select>

@@ -1,43 +1,39 @@
-'use client'
 
-import { getData } from '@/controllers/InventarioCRUD';
-import React, { useEffect, useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 
-interface Insumo {
-  nombre: string;
-  categoria: string;
-  unidadDeMedida: string;
-  descripcion: string;
-  cantidad: number;
-  precio: number;
-  proveedor: string;
+
+
+interface Insumos {
+  _id: string;
+  stockName: string;
+  stockDescription: string;
+  stockCategory: number;
+  stockUnitMesure: number;
+  stockQuantity: number;
+  stockPrice: number;
+  stockSupplier: number;
 }
 
-const Table = ({busqueda}) => {
-  const [insumos, setInsumos] = useState<Insumo[]>([
-    {
-      nombre: 'Cebollas',
-      categoria: 'Verdura',
-      unidadDeMedida: 'Libra',
-      descripcion: 'Cebolla blanca',
-      cantidad: 10,
-      precio: 25,
-      proveedor: 'Verduras Ordoñes',
-    },
-    {
-      nombre: 'Carne de res',
-      categoria: 'Carnes',
-      unidadDeMedida: 'Libra',
-      descripcion: 'Carne de res',
-      cantidad: 40,
-      precio: 145,
-      proveedor: 'Carniceria Morales',
-    },
-  ]);
+
+
+
+ const Table = ({busqueda}) => {
+
+  //const insumoData = await loadInsumos()
+  const [insumos, setInsumos] = useState<Insumos[]>([]);
+  
+  useEffect(()=>{
+    async function getInsumos(){
+      const data = await fetch('http://localhost:4000/api/stock')
+      const receta = await data.json();
+      setInsumos(receta)
+    }
+    getInsumos()
+  },[])
 
   const insumosFiltrados = insumos.filter((insumo)=>{
     return(
-      (busqueda === '' || insumo.nombre.toLowerCase().includes( busqueda.toString().toLowerCase()))
+      (busqueda === '' || insumo.stockName.toLowerCase().includes( busqueda.toString().toLowerCase()))
     )
   })
 
@@ -61,14 +57,14 @@ const Table = ({busqueda}) => {
             </thead>
             <tbody>
               {insumosFiltrados.map((insumo) => (
-                <tr key={insumo.nombre}>
-                  <td className="border px-4 py-2">{insumo.nombre}</td>
-                  <td className="border px-4 py-2">{insumo.categoria}</td>
-                  <td className="border px-4 py-2">{insumo.unidadDeMedida}</td>
-                  <td className="border px-4 py-2">{insumo.descripcion}</td>
-                  <td className="border px-4 py-2">{insumo.cantidad}</td>
-                  <td className="border px-4 py-2">{insumo.precio}</td>
-                  <td className="border px-4 py-2">{insumo.proveedor}</td>
+                <tr key={insumo._id}>
+                  <td className="border px-4 py-2">{insumo.stockName}</td>
+                  <td className="border px-4 py-2">{insumo.stockCategory}</td>
+                  <td className="border px-4 py-2">{insumo.stockUnitMesure}</td>
+                  <td className="border px-4 py-2">{insumo.stockDescription}</td>
+                  <td className="border px-4 py-2">{insumo.stockQuantity}</td>
+                  <td className="border px-4 py-2">{insumo.stockPrice}</td>
+                  <td className="border px-4 py-2">{insumo.stockSupplier}</td>
                   <td className="border px-4 py-2">
                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                       Editar

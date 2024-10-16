@@ -1,41 +1,44 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-interface Recipe {
-  id: number;
-  receta: string;
-  diaAServir: string;
-  tiempoDeComida: string;
-  porciones: number;
+interface Menu {
+  _id: string;
+  menuSaucer: string;
+  menuPreparationDay: string;
+  menuMealtime: string;
+  menuPortions: number;
 }
 
-const initialRecipes: Recipe[] = [
-  { id: 1, receta: 'Ensalada de frutas', diaAServir: 'Lun Sep 30 2024', tiempoDeComida: 'Desayuno', porciones: 35 },
-  { id: 2, receta: 'Tacos al pastor', diaAServir: 'Lun Sep 30 2024', tiempoDeComida: 'Comida', porciones: 32 },
-  { id: 3, receta: 'Pasta con salsa de tomate', diaAServir: 'Lun Sep 30 2024', tiempoDeComida: 'Cena', porciones: 35 },
-];
-
 const TableMenu = ({busqueda}) => {
-  const [recipes, setRecipes] = useState(initialRecipes);
+  const [menus, setMenus] = useState<Menu[]>([]);
   const [editing, setEditing] = useState(false);
-  const [currentRecipe, setCurrentRecipe] = useState<Recipe | null>(null);
+  const [currentRecipe, setCurrentRecipe] = useState<Menu | null>(null);
 
-  const handleEdit = (recipe: Recipe) => {
+  useEffect(()=>{
+    async function getInsumos(){
+      const data = await fetch('http://localhost:4000/api/menu')
+      const menu = await data.json();
+      setMenus(menu)
+    }
+    getInsumos()
+  },[])
+
+  const handleEdit = (menu: Menu) => {
     setEditing(true);
-    setCurrentRecipe(recipe);
+    setCurrentRecipe(menu);
   };
 
-  const handleSave = (recipe: Recipe) => {
-    const updatedRecipes = recipes.map((r) => (r.id === recipe.id ? recipe : r));
-    setRecipes(updatedRecipes);
+  const handleSave = (menu: Menu) => {
+    const updatedRecipes = menus.map((r) => (r._id === menu._id ? menu : r));
+    setMenus(updatedRecipes);
     setEditing(false);
     setCurrentRecipe(null);
   };
 
-  const menuFiltrado = initialRecipes.filter((recipe)=>{
+  const menuFiltrado = menus.filter((menu)=>{
     return(
-      (busqueda === '' || recipe.receta.toLowerCase().includes( busqueda.toString().toLowerCase()))
+      (busqueda === '' || menu.menuSaucer.toLowerCase().includes( busqueda.toString().toLowerCase()))
     )
   })
 
@@ -52,24 +55,24 @@ const TableMenu = ({busqueda}) => {
           </tr>
         </thead>
         <tbody>
-          {menuFiltrado.map((recipe) => (
-            <tr key={recipe.id}>
-              <td className="border border-gray-400 p-2">{recipe.receta}</td>
-              <td className="border border-gray-400 p-2">{recipe.diaAServir}</td>
-              <td className="border border-gray-400 p-2">{recipe.tiempoDeComida}</td>
-              <td className="border border-gray-400 p-2">{recipe.porciones}</td>
+          {menuFiltrado.map((menu) => (
+            <tr key={menu._id}>
+              <td className="border border-gray-400 p-2">{menu.menuSaucer}</td>
+              <td className="border border-gray-400 p-2">{menu.menuPreparationDay}</td>
+              <td className="border border-gray-400 p-2">{menu.menuMealtime}</td>
+              <td className="border border-gray-400 p-2">{menu.menuPortions}</td>
               {(<td className="border border-gray-400 p-2">
-                {editing && currentRecipe?.id === recipe.id ? (
+                {editing && currentRecipe?._id === menu._id ? (
                   <button
                     className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => handleSave(recipe)}
+                    onClick={() => handleSave(menu)}
                   >
                     Guardar
                   </button>
                 ) : (
                   <button
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => handleEdit(recipe)}
+                    onClick={() => handleEdit(menu)}
                   >
                     Ver Receta
                   </button>
