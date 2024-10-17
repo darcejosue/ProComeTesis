@@ -1,12 +1,16 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface FormValues {
-  nombreReceta: string;
-  diaServicio: Date;
-  tiempoComida: string;
-  porciones: number;
+  menuSaucer: object;
+  menuPreparationDay: Date;
+  menuMealtime: string;
+  menuPortions: number;
+}
+interface Recetas{
+  _id: string;
+  recipeName: string;
 }
 
 const tiempoComidaOptions = [
@@ -15,19 +19,19 @@ const tiempoComidaOptions = [
   { value: 'cena', label: 'Cena' },
 ];
 
-const recetaOptions = [
-  { value: 'receta 1', label: 'Tacos al pastor' },
-  { value: 'receta 2', label: 'Ensalada de frutas' },
-  { value: 'receta 3', label: 'Indio Viejo' },
-];
 
 const FormularioMenuDiario = () => {
-  const [formValues, setFormValues] = useState<FormValues>({
-    nombreReceta: '',
-    diaServicio: new Date(),
-    tiempoComida: '',
-    porciones: 0,
-  });
+  const [formValues, setFormValues] = useState<FormValues[]>([]);
+  const [receta, setReceta] = useState<Recetas[]>([])
+
+  useEffect(()=>{
+    async function recetaList() {
+      const data = await fetch('http://localhost:4000/api/recipe')
+      const recetaData = await data.json()
+      setReceta(recetaData)
+    }
+    recetaList()
+  },[])
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -44,10 +48,23 @@ const FormularioMenuDiario = () => {
     setFormValues({ ...formValues, [name]: new Date(value) });
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(formValues);
+    try {
+      await fetch('http://localhost:4000/api/menu', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formValues)
+      })
+     console.log(formValues)
+
+  } catch (error) {
+    console.error(error)
+  }
   };
+
 
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 bg-white rounded-md shadow-md">
@@ -58,15 +75,14 @@ const FormularioMenuDiario = () => {
         </label>
         <select
           id="nombreReceta"
-          name="nombreReceta"
-          value={formValues.nombreReceta}
+          name="menuSaucer"
           onChange={handleSelectChange}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         >
           <option value="">Seleccione una opción</option>
-          {recetaOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
+          {receta.map((option) => (
+            <option key={option._id} value={option._id}>
+              {option.recipeName}
             </option>
           ))}
         </select>
@@ -78,8 +94,7 @@ const FormularioMenuDiario = () => {
         <input
           type="date"
           id="diaServicio"
-          name="diaServicio"
-          value={formValues.diaServicio.toISOString().split('T')[0]}
+          name="menuPreparationDay"
           onChange={handleDateChange}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
@@ -90,8 +105,7 @@ const FormularioMenuDiario = () => {
         </label>
         <select
           id="tiempoComida"
-          name="tiempoComida"
-          value={formValues.tiempoComida}
+          name="menuMealtime"
           onChange={handleSelectChange}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         >
@@ -110,8 +124,7 @@ const FormularioMenuDiario = () => {
         <input
           type="number"
           id="porciones"
-          name="porciones"
-          value={formValues.porciones}
+          name="menuPortions"
           onChange={handleInputChange}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />

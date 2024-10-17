@@ -1,7 +1,7 @@
 'use client'
 
 import SearchBar from '@/components/global/Buscador'
-import FormularioReceta from '@/components/recetasComponents/NuevoInsumo'
+import FormularioReceta from '@/components/recetasComponents/NuevaReceta'
 import TablaRecetas from '@/components/recetasComponents/TableReceta'
 import React, { useState } from 'react'
 

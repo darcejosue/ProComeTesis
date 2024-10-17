@@ -2,30 +2,45 @@
 
 import React, {  useState } from 'react';
 
+interface Personal {
+  _id: string;
+  personalNombre: string;
+  personalCargo: string;
+  personalHorario: string;
+  personalTel: string;
+  personalVacacionesS: Date;
+  personalVacacionesE: Date;
+  personalSalary: number;
+}
 
 const PersonalManagement = () => {
-  const [newPersonal, setNewPersonal] = useState({
-  personalNombre: '',
-  personalCargo: '',
-  personalHorario: '',
-  personalTel: '',
-  personalVacacionesS: '',
-  personalVacacionesE: '',
-  personalSalary: '',
-  });
+  const [newPersonal, setNewPersonal] = useState<Personal[]>([]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewPersonal({ ...newPersonal, [e.target.name]: e.target.value });
   };
 
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>, type: string) => {
-    setNewPersonal({ ...newPersonal, [type]: e.target.value });
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setNewPersonal({ ...newPersonal, [name]: new Date(value) });
   };
 
   const [vista, setVista] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    try {
+      await fetch('http://localhost:4000/api/personal', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newPersonal)
+        })
+    } catch (error) {
+      console.error(error)
+    }
+   console.log(newPersonal)
   };
 
 
@@ -42,8 +57,7 @@ const PersonalManagement = () => {
             <label className="text-lg font-bold mb-2">Empleado</label>
             <input
               type="text"
-              name="personal"
-              value={newPersonal.personalNombre}
+              name="personalNombre"
               onChange={handleInputChange}
               className="p-2 border border-gray-300 rounded-lg"
             />
@@ -52,8 +66,7 @@ const PersonalManagement = () => {
             <label className="text-lg font-bold mb-2">Cargo</label>
             <input
               type="text"
-              name="cargo"
-              value={newPersonal.personalCargo}
+              name="personalCargo"
               onChange={handleInputChange}
               className="p-2 border border-gray-300 rounded-lg"
             />
@@ -62,8 +75,7 @@ const PersonalManagement = () => {
             <label className="text-lg font-bold mb-2">Horario</label>
             <input
               type="text"
-              name="horario"
-              value={newPersonal.personalHorario}
+              name="personalHorario"
               onChange={handleInputChange}
               className="p-2 border border-gray-300 rounded-lg"
             />
@@ -72,8 +84,7 @@ const PersonalManagement = () => {
             <label className="text-lg font-bold mb-2">Teléfono</label>
             <input
               type="text"
-              name="telefono"
-              value={newPersonal.personalTel}
+              name="personalTel"
               onChange={handleInputChange}
               className="p-2 border border-gray-300 rounded-lg"
             />
@@ -82,9 +93,8 @@ const PersonalManagement = () => {
             <label className="text-lg font-bold mb-2">Vacaciones Salida</label>
             <input
               type="date"
-              name="vacacionesSalida"
-              value={newPersonal.personalVacacionesS}
-              onChange={(e) => handleDateChange(e, 'vacacionesSalida')}
+              name="personalVacacionesS"
+              onChange={handleDateChange}
               className="p-2 border border-gray-300 rounded-lg"
             />
           </div>
@@ -92,9 +102,8 @@ const PersonalManagement = () => {
             <label className="text-lg font-bold mb-2">Vacaciones Entrada</label>
             <input
               type="date"
-              name="vacacionesEntrada"
-              value={newPersonal.personalVacacionesE}
-              onChange={(e) => handleDateChange(e, 'vacacionesEntrada')}
+              name="personalVacacionesE"
+              onChange={handleDateChange}
               className="p-2 border border-gray-300 rounded-lg"
             />
           </div>
@@ -102,8 +111,7 @@ const PersonalManagement = () => {
             <label className="text-lg font-bold mb-2">Salario</label>
             <input
               type="number"
-              name="salario"
-              value={newPersonal.personalSalary}
+              name="personalSalary"
               onChange={handleInputChange}
               className="p-2 border border-gray-300 rounded-lg"
             />

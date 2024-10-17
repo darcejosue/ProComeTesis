@@ -1,6 +1,6 @@
 'use'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface Compra {
   fecha: string;
@@ -10,21 +10,37 @@ interface Compra {
 }
 
 const ReporteDeCompras = () => {
-  const [compras, setCompras] = useState<Compra[]>([
-    { fecha: '2024-08-01', producto: 'Cebolla', precio: 25, proveedor: 'Verduras Ordoñes' },
-    { fecha: '2024-08-01', producto: 'Chiltomas', precio: 15, proveedor: 'Verduras Ordoñes' },
-    { fecha: '2024-08-02', producto: 'Carne de res', precio: 145, proveedor: 'Carniceria Morales' },
-  ]);
+  const [compras, setCompras] = useState<Compra[]>([]);
+
+  useEffect(()=>{
+    async function getInsumos(){
+      const data = await fetch('http://localhost:4000/api/stock')
+      const compra = await data.json();
+      setCompras(compra)
+    }
+    getInsumos()
+  },[])
 
   const [filtroFecha, setFiltroFecha] = useState('');
   const [filtroProveedor, setFiltroProveedor] = useState('');
 
   const comprasFiltradas = compras.filter((compra) => {
     return (
-      (filtroFecha === '' || compra.fecha.includes(filtroFecha)) &&
-      (filtroProveedor === '' || compra.proveedor.toLowerCase().includes( filtroProveedor.toString().toLowerCase()))
+      (filtroFecha === '' || compra.createdAt.includes(filtroFecha)) &&
+      (filtroProveedor === '' || compra.stockSupplier.supplierName.toLowerCase().includes( filtroProveedor.toString().toLowerCase()))
     );
   });
+
+  const convertDate = (date: Date) => {
+    const mongoDate = new Date(date)
+    const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    }
+    return mongoDate.toLocaleDateString('es-ES', options)
+}
 
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6 md:p-8">
@@ -67,10 +83,10 @@ const ReporteDeCompras = () => {
         <tbody>
           {comprasFiltradas.map((compra, index) => (
             <tr key={index}>
-              <td className="px-4 py-2 text-gray-700 text-sm">{compra.fecha}</td>
-              <td className="px-4 py-2 text-gray-700 text-sm">{compra.producto}</td>
-              <td className="px-4 py-2 text-gray-700 text-sm">{compra.precio}</td>
-              <td className="px-4 py-2 text-gray-700 text-sm">{compra.proveedor}</td>
+              <td className="px-4 py-2 text-gray-700 text-sm">{convertDate(compra.createdAt)}</td>
+              <td className="px-4 py-2 text-gray-700 text-sm">{compra.stockName}</td>
+              <td className="px-4 py-2 text-gray-700 text-sm">{compra.stockPrice}</td>
+              <td className="px-4 py-2 text-gray-700 text-sm">{compra.stockSupplier.supplierName}</td>
             </tr>
           ))}
         </tbody>

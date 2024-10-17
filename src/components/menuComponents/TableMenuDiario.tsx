@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 interface Menu {
   _id: string;
   menuSaucer: string;
-  menuPreparationDay: string;
+  menuPreparationDay: Date;
   menuMealtime: string;
   menuPortions: number;
 }
@@ -19,11 +19,13 @@ const TableMenu = ({busqueda}) => {
     async function getInsumos(){
       const data = await fetch('http://localhost:4000/api/menu')
       const menu = await data.json();
+      console.log(menu);
       setMenus(menu)
     }
     getInsumos()
   },[])
 
+  
   const handleEdit = (menu: Menu) => {
     setEditing(true);
     setCurrentRecipe(menu);
@@ -42,6 +44,17 @@ const TableMenu = ({busqueda}) => {
     )
   })
 
+  const convertDate = (date: Date) => {
+    const mongoDate = new Date(date)
+    const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    }
+    return mongoDate.toLocaleDateString('es-ES', options)
+}
+
   return (
     <div className="container mx-auto p-4">
       <table className="w-full border-collapse border border-gray-400">
@@ -57,8 +70,8 @@ const TableMenu = ({busqueda}) => {
         <tbody>
           {menuFiltrado.map((menu) => (
             <tr key={menu._id}>
-              <td className="border border-gray-400 p-2">{menu.menuSaucer}</td>
-              <td className="border border-gray-400 p-2">{menu.menuPreparationDay}</td>
+              <td className="border border-gray-400 p-2">{menu.menuSaucer.recipeName}</td>
+              <td className="border border-gray-400 p-2">{convertDate(menu.menuPreparationDay)}</td>
               <td className="border border-gray-400 p-2">{menu.menuMealtime}</td>
               <td className="border border-gray-400 p-2">{menu.menuPortions}</td>
               {(<td className="border border-gray-400 p-2">

@@ -22,13 +22,6 @@ interface Insumos {
 }
 
 const FormularioInsumo = () => {
-  /*const [nombreInsumo, setNombreInsumo] = useState('');
-  const [categoria, setCategoria] = useState('');
-  const [cantidad, setCantidad] = useState(0);
-  const [descripcion, setDescripcion] = useState('');
-  const [unidadDeMedida, setUnidadDeMedida] = useState('');
-  const [precio, setPrecio] = useState(0);
-  const [proveedor, setProveedor] = useState('');*/
   const [proveedorLista, setProveedorLista] = useState<Proveedor[]>([]);
   const [insumoSave, setInumoSave] = useState<Insumos[]>([])
 

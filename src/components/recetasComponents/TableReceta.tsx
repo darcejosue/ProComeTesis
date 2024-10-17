@@ -17,7 +17,9 @@ const TablaRecetas = ({busqueda}) => {
   const [recetas, setRecetas] = useState<Receta[]>([]);
   const [showIngredientes, setShowIngredientes] = useState(false);
   const [showPreparacion, setShowPreparacion] = useState(false);
-  const [selectedReceta, setSelectedReceta] = useState<Receta | null>(null);
+  const [selectedReceta, setSelectedReceta] = useState('');
+  const [dataIngredientes, setDataIngredientes] = useState([])
+  const [dataPreparacion, setDataPreparacion] = useState('')
 
   useEffect(()=>{
     async function getInsumos(){
@@ -38,14 +40,19 @@ const TablaRecetas = ({busqueda}) => {
     
   };
 
-  const handleIngredientes = (receta: Receta) => {
-    setSelectedReceta(receta);
+  const handleIngredientes = (receta: [], name:string) => {
+    const data = receta.map((r) => r)
+    console.log(data);
+    setDataIngredientes(data)
     setShowIngredientes(true);
+    setSelectedReceta(name);
   };
 
-  const handlePreparacion = (receta: Receta) => {
-    setSelectedReceta(receta);
+  const handlePreparacion = (receta: string, name:string) => {
+    setSelectedReceta(name);
+    setDataPreparacion(receta);
     setShowPreparacion(true);
+    console.log(receta);
   };
 
   const recetaFiltrados = recetas.filter((receta)=>{
@@ -76,7 +83,7 @@ const TablaRecetas = ({busqueda}) => {
               <td className="border px-4 py-2">
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={() => handleIngredientes(receta)}
+                  onClick={() => handleIngredientes(receta.recipeIngredients, receta.recipeName)}
                 >
                   Ver Ingredientes
                 </button>
@@ -85,7 +92,7 @@ const TablaRecetas = ({busqueda}) => {
               <td className="border px-4 py-2">
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={() => handlePreparacion(receta)}
+                  onClick={() => handlePreparacion(receta.recipePreparation, receta.recipeName)}
                 >
                   Ver Preparacion
                 </button>
@@ -110,11 +117,11 @@ const TablaRecetas = ({busqueda}) => {
           ))}
         </tbody>
       </table>
-      {showIngredientes && selectedReceta && (
+      {showIngredientes && dataIngredientes && (
         <div className="mt-4">
-          <h2 className="text-lg font-bold">Ingredientes de {selectedReceta.recipeName}</h2>
-          <p className="text-gray-600">{selectedReceta.recipeIngredients.map((ingrediente)=>
-            (<li key={ingrediente}>{ingrediente}</li>))}</p>
+          <h2 className="text-lg font-bold">Ingredientes de {selectedReceta}</h2>
+          <p className="text-gray-600">{dataIngredientes.map((ingrediente)=>
+            (<li key={ingrediente}>{ingrediente.stockName}: {ingrediente.cantidadPorPlato} {ingrediente.stockUnitMesure} por plato</li>))}</p>
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={() => setShowIngredientes(false)}
@@ -123,10 +130,10 @@ const TablaRecetas = ({busqueda}) => {
           </button>
         </div>
       )}
-      {showPreparacion && selectedReceta && (
+      {showPreparacion && dataPreparacion && (
         <div className="mt-4">
-          <h2 className="text-lg font-bold">Preparacion de {selectedReceta.recipeName}</h2>
-          <p className="text-gray-600">{selectedReceta.recipePreparation}</p>
+          <h2 className="text-lg font-bold">Preparacion de {selectedReceta}</h2>
+          <p className="text-gray-600">{dataPreparacion}</p>
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={() => setShowPreparacion(false)}

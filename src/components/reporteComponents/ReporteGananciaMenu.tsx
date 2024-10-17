@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Plato {
   nombre: string;
@@ -10,13 +10,28 @@ interface Plato {
 }
 
 const ReporteComida = () => {
-  const [platos, setPlatos] = useState<Plato[]>([
-    { nombre: 'Ensalada de frutas', precio: 105, porciones: 35, fecha: '2024-09-30' },
-    { nombre: 'Tacos al pastor', precio: 125, porciones: 32, fecha: '2024-09-30' },
-    { nombre: 'Pasta con salsa de tomate', precio: 110, porciones: 35, fecha: '2024-09-30' },
-    { nombre: 'Ensalada de frutas', precio: 105, porciones: 35, fecha: '2024-09-29' },
-    { nombre: 'Pescado frito', precio: 150, porciones: 35, fecha: '2024-09-29' },
-  ]);
+  const [platos, setPlatos] = useState<Plato[]>([]);
+
+  useEffect(()=>{
+    async function getInsumos(){
+      const data = await fetch('http://localhost:4000/api/menu')
+      const plato = await data.json();
+      setPlatos(plato)
+    }
+    getInsumos()
+  },[])
+
+  const convertDate = (date: Date) => {
+    const mongoDate = new Date(date)
+    const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    }
+    return mongoDate.toLocaleDateString('es-ES', options)
+}
+
 
   const [fechaSeleccionada, setFechaSeleccionada] = useState<string>('');
 
@@ -24,11 +39,11 @@ const ReporteComida = () => {
     if (fechaSeleccionada === '') {
       return true;
     }
-    return plato.fecha === fechaSeleccionada;
+    return plato.menuPreparationDay === fechaSeleccionada;
   });
 
   const totalGanancias = platosFiltrados.reduce((acumulado, plato) => {
-    return acumulado + (plato.precio * plato.porciones * 1.4);
+    return acumulado + (plato.menuSaucer.recipePrice * plato.menuPortions * 1.4);
   }, 0);
 
   return (
@@ -40,8 +55,8 @@ const ReporteComida = () => {
         onChange={(e) => setFechaSeleccionada(e.target.value)}
       >
         <option value="">Seleccione una fecha</option>
-        {Array.from(new Set(platos.map((plato) => plato.fecha))).map((fecha) => (
-          <option key={fecha} value={fecha}>{fecha}</option>
+        {Array.from(new Set(platos.map((plato) => plato.menuPreparationDay))).map((fecha) => (
+          <option key={fecha} value={fecha}>{convertDate(fecha)}</option>
         ))}
       </select>
       <table className="w-full border-collapse border border-gray-300">
@@ -56,12 +71,12 @@ const ReporteComida = () => {
         </thead>
         <tbody>
           {platosFiltrados.map((plato) => (
-            <tr key={plato.nombre}>
-              <td className="p-2 border border-gray-300">{plato.nombre}</td>
-              <td className="p-2 border border-gray-300">C${plato.precio}</td>
-              <td className="p-2 border border-gray-300">{plato.porciones}</td>
-              <td className="p-2 border border-gray-300">{plato.fecha}</td>
-              <td className="p-2 border border-gray-300">C${(plato.precio * plato.porciones * 1.4).toFixed(2)}</td>
+            <tr key={plato._id}>
+              <td className="p-2 border border-gray-300">{plato.menuSaucer.recipeName}</td>
+              <td className="p-2 border border-gray-300">C${plato.menuSaucer.recipePrice}</td>
+              <td className="p-2 border border-gray-300">{plato.menuPortions}</td>
+              <td className="p-2 border border-gray-300">{convertDate(plato.menuPreparationDay)}</td>
+              <td className="p-2 border border-gray-300">C${((plato.menuSaucer.recipePrice) * plato.menuPortions * 1.4).toFixed(2)}</td>
             </tr>
           ))}
         </tbody>
