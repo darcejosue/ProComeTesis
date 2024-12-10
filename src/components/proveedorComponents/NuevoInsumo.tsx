@@ -8,7 +8,7 @@ interface Proveedor {
   supplierTel: string;
 }
 
-const FormularioProveedor = () => {
+const FormularioProveedor = ({setVisible}) => {
   const [proveedor, setProveedor] = useState<Proveedor[]>([]);
 
   const [enviado, setEnviado] = useState(false);
@@ -39,7 +39,7 @@ const FormularioProveedor = () => {
         console.log(error);
       }, 3000);
     }
-    
+    setVisible(false)
   };
 
 

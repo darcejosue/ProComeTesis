@@ -24,7 +24,7 @@ interface Receta {
 
 //const UnidadDeMedida = ['Gramos', 'Mililitros', 'Unidades'];
 
-const FormularioReceta = () => {
+const FormularioReceta = ({setVisible}) => {
   const [id, setId] = useState('')
   const [ingrediente, setIngrediente] = useState('');
   const [precioIngrediente, setPrecioIngrediente] = useState(0);
@@ -79,6 +79,7 @@ const FormularioReceta = () => {
       console.error(error)
       }
      console.log(receta)
+     setVisible(false)
 
   };
 

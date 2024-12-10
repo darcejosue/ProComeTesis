@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 
-const categorias = [1,2,3];
-const unidadesDeMedida = [1,2,3];
+const categorias = ["Verdura","Fruta","Grano","Carne","Lacteos", "Otros"];
+const unidadesDeMedida = ["gr","lb","ltr","onz","unidad"];
 
 interface Proveedor{
   _id: string;
@@ -21,7 +21,7 @@ interface Insumos {
   stockSupplier: object;
 }
 
-const FormularioInsumo = () => {
+const FormularioInsumo = ({setVisible}) => {
   const [proveedorLista, setProveedorLista] = useState<Proveedor[]>([]);
   const [insumoSave, setInumoSave] = useState<Insumos[]>([])
 
@@ -59,7 +59,8 @@ const FormularioInsumo = () => {
   } catch (error) {
     console.error(error)
   }
-    console.log(insumoSave)
+    alert("Producto guardado");
+    setVisible(false);
   };
 
   return (

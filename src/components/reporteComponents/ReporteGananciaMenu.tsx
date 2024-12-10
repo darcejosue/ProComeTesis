@@ -43,7 +43,7 @@ const ReporteComida = () => {
   });
 
   const totalGanancias = platosFiltrados.reduce((acumulado, plato) => {
-    return acumulado + (plato.menuSaucer.recipePrice * plato.menuPortions * 1.4);
+    return acumulado + ((plato.menuSaucer.recipePrice * 0.2) * plato.menuPortions );
   }, 0);
 
   return (
@@ -73,10 +73,10 @@ const ReporteComida = () => {
           {platosFiltrados.map((plato) => (
             <tr key={plato._id}>
               <td className="p-2 border border-gray-300">{plato.menuSaucer.recipeName}</td>
-              <td className="p-2 border border-gray-300">C${plato.menuSaucer.recipePrice}</td>
+              <td className="p-2 border border-gray-300">C${(plato.menuSaucer.recipePrice).toFixed(2)}</td>
               <td className="p-2 border border-gray-300">{plato.menuPortions}</td>
               <td className="p-2 border border-gray-300">{convertDate(plato.menuPreparationDay)}</td>
-              <td className="p-2 border border-gray-300">C${((plato.menuSaucer.recipePrice) * plato.menuPortions * 1.4).toFixed(2)}</td>
+              <td className="p-2 border border-gray-300">C${((plato.menuSaucer.recipePrice * 0.2) * plato.menuPortions ).toFixed(2)}</td>
             </tr>
           ))}
         </tbody>

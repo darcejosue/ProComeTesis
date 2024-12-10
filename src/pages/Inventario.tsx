@@ -9,6 +9,8 @@ export const Inventario = () => {
 
     const [visible, setVisible] = useState(false);
     const [busqueda, setBusqueda] = useState(''); 
+    const [editar, setEditar] = useState('');
+    const [perdida, setPerdida] = useState('');
     return (
         <div>
             <h1 className='text-center text-3xl text-black font-bold py-2'
@@ -25,14 +27,16 @@ export const Inventario = () => {
                         Nuevo insumo
                     </button>
                 </div>
+               
                 {busqueda}
             </div>
             {
-                visible ? <FormularioInsumo /> : <h2></h2>
+                visible ? <FormularioInsumo setVisible={setVisible}/> : <h2></h2>
             }
 
-            <Table busqueda={busqueda}/>
-            
+            {
+                visible ? <h2></h2>:<Table busqueda={busqueda} setEditar={setEditar} setPerdida={setPerdida}/>
+            }            
 
 
         </div>

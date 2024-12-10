@@ -14,13 +14,16 @@ interface Recetas{
 }
 
 const tiempoComidaOptions = [
-  { value: 'desayuno', label: 'Desayuno' },
-  { value: 'almuerzo', label: 'Almuerzo' },
-  { value: 'cena', label: 'Cena' },
+  { value: 'Primer Desayuno', label: 'Primer Desayuno' },
+  { value: 'Segundo Desayuno', label: 'Segundo Desayuno' },
+  { value: 'Primer Almuerzo', label: 'Primer Almuerzo' },
+  { value: 'Segundo Almuerzo', label: 'Segundo Almuerzo' },
+  { value: 'Primera Cena', label: 'Primer Cena' },
+  { value: 'Segunda Cena', label: 'Segunda Cena' },
 ];
 
 
-const FormularioMenuDiario = () => {
+const FormularioMenuDiario = ({setVisible}) => {
   const [formValues, setFormValues] = useState<FormValues[]>([]);
   const [receta, setReceta] = useState<Recetas[]>([])
 
@@ -63,6 +66,7 @@ const FormularioMenuDiario = () => {
   } catch (error) {
     console.error(error)
   }
+  setVisible(false)
   };
 
 

@@ -28,9 +28,11 @@ export const MenuDiario = () => {
             </div>
         </div>
         {
-            visible ? <FormularioMenuDiario /> : <h2></h2>
+            visible ? <FormularioMenuDiario setVisible={setVisible}/> : <h2></h2>
         }
-        <TableMenu busqueda={busqueda}/>
+        {
+          visible ? <h2></h2> : <TableMenu busqueda={busqueda}/>
+        }
     </div>
   )
 }

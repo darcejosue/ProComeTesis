@@ -17,7 +17,7 @@ interface Insumos {
 
 
 
- const Table = ({busqueda}) => {
+ const Table = ({busqueda, setEditar, setPerdida}) => {
 
   //const insumoData = await loadInsumos()
   const [insumos, setInsumos] = useState<Insumos[]>([]);
@@ -72,7 +72,7 @@ interface Insumos {
                   </td>
                   <td className="border px-4 py-2">
                     <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                      Eliminar
+                      Perdida Insumo
                     </button>
                   </td>
                 </tr>

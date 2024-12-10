@@ -91,6 +91,7 @@ const TableMenu = ({busqueda}) => {
                   </button>
                 )}
               </td>)}
+              
             </tr>
           ))}
         </tbody>

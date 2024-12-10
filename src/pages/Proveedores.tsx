@@ -31,9 +31,11 @@ export const Proveedores = () => {
           visibleList ? <ListaCompras/>: <h2></h2>
         }
         {
-            visible ? <FormularioProveedor /> : <h2></h2>
+            visible ? <FormularioProveedor setVisible={setVisible}/> : <h2></h2>
         }
-      <ProveedoresTable busqueda={busqueda} visibleList={visibleList} setVisibleList={setVisibleList}/>
+      {
+        visible ? <h2></h2> : <ProveedoresTable busqueda={busqueda} visibleList={visibleList} setVisibleList={setVisibleList}/>
+      }
     </div>
   )
 }

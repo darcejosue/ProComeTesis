@@ -88,7 +88,7 @@ const TablaRecetas = ({busqueda}) => {
                   Ver Ingredientes
                 </button>
               </td>
-              <td className="border px-4 py-2">{receta.recipePrice}</td>
+              <td className="border px-4 py-2">C${receta.recipePrice.toFixed(2)}</td>
               <td className="border px-4 py-2">
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

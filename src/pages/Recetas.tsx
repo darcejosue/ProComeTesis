@@ -27,9 +27,11 @@ export const Recetas = () => {
             </div>
         </div>
         {
-            visible ? <FormularioReceta/> : <h2></h2>
+            visible ? <FormularioReceta setVisible={setVisible}/> : <h2></h2>
         }
-      <TablaRecetas busqueda={busqueda}/>
+      {
+        visible ? <h2></h2> : <TablaRecetas busqueda={busqueda}/>
+      }
 
     </div>
   )

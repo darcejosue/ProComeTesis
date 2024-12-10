@@ -1,3 +1,5 @@
+
+
 import React, { useState } from 'react';
 
 interface LoginCredentials {
@@ -19,6 +21,7 @@ const LoginForm = () => {
     } else {
       // Lógica de autenticación aquí
       console.log(credentials);
+
       setError(null);
     }
   };
@@ -71,9 +74,10 @@ const LoginForm = () => {
         )}
         <button
           type="submit"
+          
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
-          Iniciar sesión
+          <a href="/">Iniciar sesión</a>
         </button>
       </form>
     </div>

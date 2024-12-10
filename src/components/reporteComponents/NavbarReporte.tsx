@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import ReporteDeCompras from './ReporteCompras';
 import ReporteComida from './ReporteGananciaMenu';
+import ReporteDePerdidas from './ReportePerdida';
 
 interface NavButton {
   id: number;
@@ -13,6 +14,7 @@ interface NavButton {
 const navButtons: NavButton[] = [
   { id: 1, label: 'Reporte de Compras', content: <ReporteDeCompras/> },
   { id: 2, label: 'Reporte de Ganancia Comida', content: <ReporteComida/> },
+  { id: 3, label: 'Reporte de Perdidas', content: <ReporteDePerdidas/> },
 ];
 
 const Navbar = () => {
