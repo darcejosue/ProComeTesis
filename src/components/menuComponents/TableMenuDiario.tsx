@@ -40,7 +40,7 @@ const TableMenu = ({busqueda}) => {
 
   const menuFiltrado = menus.filter((menu)=>{
     return(
-      (busqueda === '' || menu.menuSaucer.toLowerCase().includes( busqueda.toString().toLowerCase()))
+      (busqueda === '' || menu.menuSaucer.recipeName.toLowerCase().includes( busqueda.toString().toLowerCase()))
     )
   })
 

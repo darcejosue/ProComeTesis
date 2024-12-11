@@ -1,5 +1,6 @@
 
 import React, {  useEffect, useState } from 'react';
+import PerdidaForm from '../global/FormularioPerdida';
 
 
 
@@ -52,7 +53,7 @@ interface Insumos {
                 <th className="px-4 py-2  text-black">Precio</th>
                 <th className="px-4 py-2  text-black">Proveedor</th>
                 <th className="px-4 py-2  text-black">Editar</th>
-                <th className="px-4 py-2  text-black">Eliminar</th>
+                <th className="px-4 py-2  text-black">Perdida de insumo</th>
               </tr>
             </thead>
             <tbody>
@@ -71,8 +72,11 @@ interface Insumos {
                     </button>
                   </td>
                   <td className="border px-4 py-2">
-                    <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                      Perdida Insumo
+                    <button>
+                     <PerdidaForm 
+                        nombre = {insumo.stockName} 
+                        unidad = {insumo.stockUnitMesure}
+                        precio = {insumo.stockPrice}/>
                     </button>
                   </td>
                 </tr>

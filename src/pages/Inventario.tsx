@@ -27,8 +27,9 @@ export const Inventario = () => {
                         Nuevo insumo
                     </button>
                 </div>
+                
                
-                {busqueda}
+                
             </div>
             {
                 visible ? <FormularioInsumo setVisible={setVisible}/> : <h2></h2>
