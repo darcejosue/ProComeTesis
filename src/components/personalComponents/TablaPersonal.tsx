@@ -50,6 +50,7 @@ export const TablaPersonal = () => {
                         <th className="p-2 border border-gray-300">Vacaciones Salida</th>
                         <th className="p-2 border border-gray-300">Vacaciones Entrada</th>
                         <th className="p-2 border border-gray-300">Salario</th>
+                        <th className="p-2 border border-gray-300">Editar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -62,6 +63,7 @@ export const TablaPersonal = () => {
                             <td className="p-2 border border-gray-300">{convertDate(item.personalVacacionesS)}</td>
                             <td className="p-2 border border-gray-300">{convertDate(item.personalVacacionesE)}</td>
                             <td className="p-2 border border-gray-300">{item.personalSalary}</td>
+                            <td className="p-2 border border-gray-300"><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Editar</button></td>
                         </tr>
                     ))}
                 </tbody>

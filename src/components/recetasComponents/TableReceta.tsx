@@ -1,6 +1,8 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
+import Receta from '../global/Receta';
+import EliminarReceta from '../global/EliminarReceta';
 
 interface Receta {
   _id: string;
@@ -13,22 +15,23 @@ interface Receta {
 
 
 
-const TablaRecetas = ({busqueda}) => {
+const TablaRecetas = ({ busqueda }) => {
   const [recetas, setRecetas] = useState<Receta[]>([]);
   const [showIngredientes, setShowIngredientes] = useState(false);
   const [showPreparacion, setShowPreparacion] = useState(false);
   const [selectedReceta, setSelectedReceta] = useState('');
   const [dataIngredientes, setDataIngredientes] = useState([])
   const [dataPreparacion, setDataPreparacion] = useState('')
+  const [eliminar, setEliminar] = useState(false);
 
-  useEffect(()=>{
-    async function getInsumos(){
+  useEffect(() => {
+    async function getInsumos() {
       const data = await fetch('http://localhost:4000/api/recipe')
       const recipe = await data.json();
       setRecetas(recipe)
     }
     getInsumos()
-  },[])
+  }, [])
 
   const handleEliminar = (_id: string) => {
     setRecetas(recetas.filter((receta) => receta._id !== _id));
@@ -37,10 +40,10 @@ const TablaRecetas = ({busqueda}) => {
   const handleEditar = (receta: Receta) => {
     // Aqui puedes agregar la logica para editar la receta
     console.log(receta);
-    
+
   };
 
-  const handleIngredientes = (receta: [], name:string) => {
+  const handleIngredientes = (receta: [], name: string) => {
     const data = receta.map((r) => r)
     console.log(data);
     setDataIngredientes(data)
@@ -48,16 +51,16 @@ const TablaRecetas = ({busqueda}) => {
     setSelectedReceta(name);
   };
 
-  const handlePreparacion = (receta: string, name:string) => {
+  const handlePreparacion = (receta: string, name: string) => {
     setSelectedReceta(name);
     setDataPreparacion(receta);
     setShowPreparacion(true);
     console.log(receta);
   };
 
-  const recetaFiltrados = recetas.filter((receta)=>{
-    return(
-      (busqueda === '' || receta.recipeName.toLowerCase().includes( busqueda.toString().toLowerCase()))
+  const recetaFiltrados = recetas.filter((receta) => {
+    return (
+      (busqueda === '' || receta.recipeName.toLowerCase().includes(busqueda.toString().toLowerCase()))
     )
   })
 
@@ -68,11 +71,9 @@ const TablaRecetas = ({busqueda}) => {
           <tr>
             <th className="px-4 py-2">Nombre Receta</th>
             <th className="px-4 py-2">Descripcion</th>
-            <th className="px-4 py-2">Ingredientes</th>
             <th className="px-4 py-2">Precio por plato</th>
-            <th className="px-4 py-2">Preparacion</th>
+            <th className="px-4 py-2">Preparación</th>
             <th className="px-4 py-2">Editar</th>
-            <th className="px-4 py-2">Eliminar</th>
           </tr>
         </thead>
         <tbody>
@@ -80,22 +81,14 @@ const TablaRecetas = ({busqueda}) => {
             <tr key={receta._id}>
               <td className="border px-4 py-2">{receta.recipeName}</td>
               <td className="border px-4 py-2">{receta.recipeDescription}</td>
-              <td className="border px-4 py-2">
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={() => handleIngredientes(receta.recipeIngredients, receta.recipeName)}
-                >
-                  Ver Ingredientes
-                </button>
-              </td>
+              
               <td className="border px-4 py-2">C${receta.recipePrice.toFixed(2)}</td>
               <td className="border px-4 py-2">
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={() => handlePreparacion(receta.recipePreparation, receta.recipeName)}
-                >
-                  Ver Preparacion
-                </button>
+                <Receta 
+                  ingredientes={receta.recipeIngredients}
+                  receta={receta.recipePreparation}
+                  nombre={receta.recipeName} 
+                  />
               </td>
               <td className="border px-4 py-2">
                 <button
@@ -105,14 +98,7 @@ const TablaRecetas = ({busqueda}) => {
                   Editar
                 </button>
               </td>
-              <td className="border px-4 py-2">
-                <button
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={() => handleEliminar(receta._id)}
-                >
-                  Eliminar
-                </button>
-              </td>
+              
             </tr>
           ))}
         </tbody>
@@ -120,7 +106,7 @@ const TablaRecetas = ({busqueda}) => {
       {showIngredientes && dataIngredientes && (
         <div className="mt-4">
           <h2 className="text-lg font-bold">Ingredientes de {selectedReceta}</h2>
-          <p className="text-gray-600">{dataIngredientes.map((ingrediente)=>
+          <p className="text-gray-600">{dataIngredientes.map((ingrediente) =>
             (<li key={ingrediente}>{ingrediente.stockName}: {ingrediente.cantidadPorPlato} {ingrediente.stockUnitMesure} por plato</li>))}</p>
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

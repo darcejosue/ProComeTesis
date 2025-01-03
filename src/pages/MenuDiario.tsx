@@ -8,7 +8,7 @@ import React, { useState } from 'react'
 
 export const MenuDiario = () => {
   const [visible, setVisible] = useState(false);
-  const [busqueda, setBusqueda] = useState(''); 
+  const [diaServir, setDiaServir] = useState(''); 
 
   return (
     <div>
@@ -16,8 +16,14 @@ export const MenuDiario = () => {
             >Menu Diario</h1>
             <div className="parent">
             <div className="div1">
-                <SearchBar setBusqueda={setBusqueda}/>
-
+                
+                <input 
+                id="diaServir"
+                type="date" 
+                value={diaServir}
+                onChange={(e)=>setDiaServir(e.target.value)}
+                className='m-5 p-5 rounded-xl'
+                />
             </div>
             <div className="div2 py-5">
                {( <button
@@ -31,7 +37,7 @@ export const MenuDiario = () => {
             visible ? <FormularioMenuDiario setVisible={setVisible}/> : <h2></h2>
         }
         {
-          visible ? <h2></h2> : <TableMenu busqueda={busqueda}/>
+          visible ? <h2></h2> : <TableMenu busqueda={diaServir}/>
         }
     </div>
   )

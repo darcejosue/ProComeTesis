@@ -17,6 +17,7 @@ interface Insumos {
   stockCategory: number;
   stockUnitMesure: number;
   stockQuantity: number;
+  stockAlert: number;
   stockPrice: number;
   stockSupplier: object;
 }
@@ -106,6 +107,18 @@ const FormularioInsumo = ({setVisible}) => {
             type="number"
             name="stockQuantity"
             value={insumoSave.stockQuantity}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="flex flex-col mb-4">
+          <label className="text-sm font-bold mb-2" htmlFor="stockAlert">
+            Cantidad minima para lanzar alerta
+          </label>
+          <input
+            className="p-2 rounded-lg border border-gray-300"
+            type="number"
+            name="stockAlert"
+            value={insumoSave.stockAlert}
             onChange={handleChange}
           />
         </div>

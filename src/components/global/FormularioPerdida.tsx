@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface PerdidaForm {
     perdidaIngrediente: string;
@@ -11,7 +11,17 @@ interface PerdidaForm {
 
 
 
-const PerdidaForm = ({ nombre, unidad, precio }) => {
+const PerdidaForm = ({ nombre, unidad, precio, cantidad, id, refresh, setRefresh }) => {
+    const [cantidadRestada, setCantidadRestada] = useState([]);
+    useEffect(() => {
+        async function getInsumo() {
+            const data = await fetch('http://localhost:4000/api/stock/' + id)
+            const cantidadRestada = await data.json();
+            setCantidadRestada(cantidadRestada);
+        }
+        getInsumo()
+    }, [id])
+
     const [insumo, setInsumo] = useState(nombre);
     const [unidadInsumo, setUnidadInsumo] = useState(unidad);
     const [precioInsumo, setPrecioInsumo] = useState(precio);
@@ -28,26 +38,36 @@ const PerdidaForm = ({ nombre, unidad, precio }) => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(formData);
+        cantidadRestada.stockQuantity = cantidadRestada.stockQuantity - formData.perdidaCantidad;
         setIsOpen(!isOpen);
         try {
             await fetch('http://localhost:4000/api/perdida', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
             })
-      
+
+            await fetch('http://localhost:4000/api/stock/' + id, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(cantidadRestada)
+            })
+
+            setRefresh(!refresh);
+
         } catch (error) {
-          console.error(error)
+            console.error(error)
         }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
-        
+
     };
 
     const handleToggle = () => {

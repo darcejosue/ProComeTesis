@@ -1,6 +1,8 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
+import Receta from '../global/Receta';
+import EstadoMenu from '../global/EstadoMenu';
 
 interface Menu {
   _id: string;
@@ -8,6 +10,7 @@ interface Menu {
   menuPreparationDay: Date;
   menuMealtime: string;
   menuPortions: number;
+  menuEstado: boolean;
 }
 
 const TableMenu = ({busqueda}) => {
@@ -19,7 +22,7 @@ const TableMenu = ({busqueda}) => {
     async function getInsumos(){
       const data = await fetch('http://localhost:4000/api/menu')
       const menu = await data.json();
-      console.log(menu);
+      //console.log(menu);
       setMenus(menu)
     }
     getInsumos()
@@ -40,20 +43,24 @@ const TableMenu = ({busqueda}) => {
 
   const menuFiltrado = menus.filter((menu)=>{
     return(
-      (busqueda === '' || menu.menuSaucer.recipeName.toLowerCase().includes( busqueda.toString().toLowerCase()))
+      (busqueda === '' || menu.menuPreparationDay.includes(busqueda))
     )
   })
 
   const convertDate = (date: Date) => {
-    const mongoDate = new Date(date)
+    const mongoDate = new Date(date);
+    const localDate = new Date(mongoDate.getTime() + (new Date()).getTimezoneOffset()*60000);
     const options = {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
         day: 'numeric',
     }
-    return mongoDate.toLocaleDateString('es-ES', options)
+    return localDate.toLocaleDateString('es-US', options);
+    //.toLocaleDateString('es-US', options)
 }
+
+
 
   return (
     <div className="container mx-auto p-4">
@@ -65,6 +72,7 @@ const TableMenu = ({busqueda}) => {
             <th className="border border-gray-400 p-2">Tiempo de comida</th>
             <th className="border border-gray-400 p-2">Porciones</th>
             {(<th className="border border-gray-400 p-2">Ver Receta</th>)}
+            <th className="border border-gray-400 p-2">Estado</th>
           </tr>
         </thead>
         <tbody>
@@ -74,24 +82,12 @@ const TableMenu = ({busqueda}) => {
               <td className="border border-gray-400 p-2">{convertDate(menu.menuPreparationDay)}</td>
               <td className="border border-gray-400 p-2">{menu.menuMealtime}</td>
               <td className="border border-gray-400 p-2">{menu.menuPortions}</td>
-              {(<td className="border border-gray-400 p-2">
-                {editing && currentRecipe?._id === menu._id ? (
-                  <button
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => handleSave(menu)}
-                  >
-                    Guardar
-                  </button>
-                ) : (
-                  <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => handleEdit(menu)}
-                  >
-                    Ver Receta
-                  </button>
-                )}
-              </td>)}
+              <td><Receta 
+              receta={menu.menuSaucer.recipePreparation} 
+              ingredientes={menu.menuSaucer.recipeIngredients}
+              nombre={menu.menuSaucer.recipeName}/></td>
               
+              <td><EstadoMenu id={menu._id} estadoMenu={menu.menuEstado} idReceta={menu.menuSaucer._id}/></td>
             </tr>
           ))}
         </tbody>

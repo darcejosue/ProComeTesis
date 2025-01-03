@@ -1,0 +1,138 @@
+import React, { useEffect, useState } from 'react';
+
+interface EditarInsumoForm {
+    stockQuantity: number;
+    stockPrice: number;
+}
+
+
+
+const EditarInsumo = ({ id, refresh, setRefresh }) => {
+    const [ingrediente, setIngrediente] = useState([]);
+    
+    useEffect(() => {
+        async function getInsumo() {
+            const data = await fetch('http://localhost:4000/api/stock/' + id)
+            const ingredienteData = await data.json();
+            setIngrediente(ingredienteData);
+        }
+        getInsumo()
+    }, [id])
+    
+    const [formData, setFormData] = useState(ingrediente);
+   
+
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        formData.stockQuantity = Number(formData.stockQuantity) + ingrediente.stockQuantity;
+        e.preventDefault();
+        setIsOpen(!isOpen);
+        try {
+           
+
+            await fetch('http://localhost:4000/api/stock/'+ id, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            setRefresh(!refresh);
+
+        } catch (error) {
+            console.error(error)
+        }
+        
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormData((formData) => ({ ...formData, [name]: value }));
+
+    };
+
+    const handleToggle = () => {
+        setIsOpen(!isOpen);
+    };
+
+    return (
+        <div>
+            <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                onClick={handleToggle}
+            >
+                Editar
+            </button>
+            {isOpen && (
+                <div
+                    className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center"
+                    onClick={(e) => {
+                        if (e.target === e.currentTarget) {
+                            handleToggle();
+                        }
+                    }}
+                >
+                    <div
+                        className="bg-white rounded-lg shadow-md p-10 max-w-lg mx-auto"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <h2 className="text-lg font-bold mb-4">Editar {ingrediente.stockName}</h2>
+                        <form onSubmit={handleSubmit}>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nombreInsumo">
+                                    {ingrediente.stockCategory}
+                                </label>
+                            </div>
+
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nombreInsumo">
+                                    Cantidad existente: {ingrediente.stockQuantity}
+                                </label>
+                            </div>
+                            
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="stockQuantity">
+                                    Cantidad a añadir
+                                </label>
+                                <input
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="stockQuantity"
+                                    name="stockQuantity"
+                                    type="number"
+                                    value={formData.stockQuantity}
+                                    onChange={handleChange}
+                                />
+                            </div>
+
+                            
+
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="stockPrice">
+                                    Precio anterior: C$ {ingrediente.stockPrice}
+                                </label>
+                                <input
+                                    className="shadow appearance-none border rounded w-full h-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="stockPrice"
+                                    name="stockPrice"
+                                    type="number"
+                                    value={formData.stockPrice}
+                                    onChange={handleChange}
+                                    placeholder='Nuevo precio'
+                                />
+                            </div>
+                            <button
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                type="submit"
+                            >
+                                Guardar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default EditarInsumo;

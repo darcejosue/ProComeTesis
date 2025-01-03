@@ -36,7 +36,10 @@ export const Inventario = () => {
             }
 
             {
-                visible ? <h2></h2>:<Table busqueda={busqueda} setEditar={setEditar} setPerdida={setPerdida}/>
+                visible ? <h2></h2>:
+                <div >
+                    <Table busqueda={busqueda} setEditar={setEditar} setPerdida={setPerdida}/>
+                 </div>
             }            
 
 
